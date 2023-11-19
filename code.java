@@ -1,6 +1,9 @@
-package Main;
+//package Main;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Main extends JFrame{
     public Main(){
@@ -95,14 +98,37 @@ public class Main extends JFrame{
 
 
     class SouthPanel extends JPanel{
-        public SouthPanel() {
+        static int water = 100;
+        static int sugar = 100;
+        static int cup = 100;
+        static int cream = 100;
+        static int coffee = 100;
+
+		public SouthPanel() {
             setBackground(Color.LIGHT_GRAY);
             setOpaque(true);
             setLayout(new FlowLayout(FlowLayout.CENTER));
-            add(new JButton("Black Coffee"));
-            add(new JButton("Sugar Coffee"));
-            add(new JButton("Dabang Coffee"));
-            add(new JButton("Reset"));
+            JButton btnCoffee =new JButton("Black Coffee");
+            btnCoffee.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                	if(water>=10 &&coffee>=10) {
+                		water-=10;
+                		coffee-=10;
+                		JOptionPane.showMessageDialog(null, "Black Coffee가 나왔습니다.");
+                		waterBar.setValue(water);
+                	}
+                }
+            });
+            add(btnCoffee);
+            add(btnCoffee);
+            add(btnCoffee);
+            JButton btnSugar =new JButton("Sugar Coffee");
+            add(btnSugar);
+            JButton btnDabang =new JButton("Dabang Coffee");
+            add(btnDabang);
+            JButton btnReset =new JButton("Reset");
+            add(btnReset);
         }
     }
 
