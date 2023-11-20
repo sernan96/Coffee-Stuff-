@@ -1,135 +1,132 @@
-//package Main;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+package Main;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Main extends JFrame{
-    public Main(){
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("java programming report");
-        Container c = getContentPane();
-        c.add(new NorthPanel(), BorderLayout.NORTH);
-        c.add(new CenterPanel(), BorderLayout.CENTER);
-        c.add(new SouthPanel(), BorderLayout.SOUTH);
-        setSize(500, 500);
-        setVisible(true);
-    }
-    public static void main(String[] args) {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 
-        new Main();
-    }
-    class NorthPanel extends JPanel{
-        public NorthPanel(){
-            setBackground(Color.GREEN);
-            setOpaque(true);
-            setLayout(new FlowLayout(FlowLayout.CENTER));
-            add(new JLabel("반갑습니다. YU커피입니다."));
-        }
-    }
-    class CenterPanel extends JPanel{
-        public CenterPanel(){
-            setLayout(new BorderLayout());
+public class Main extends JFrame {
+	CenterPanel centerPanel;
 
-            JPanel gaugePanel = new JPanel();
-            gaugePanel.setLayout(new GridLayout(1,5));  // GridLayout으로 게이지 패널들을 수평 배치
-            gaugePanel.add(Box.createRigidArea(new Dimension(20, 20)));
-            // 게이지 패널들 추가
-            //cupPanel
-            JPanel cupPanel = new JPanel(new BorderLayout());
-            JProgressBar cupBar = new JProgressBar(JProgressBar.VERTICAL, 0,100);
-            cupBar.setValue(100);
-            cupPanel.add(cupBar, BorderLayout.NORTH);
-            JLabel cupLabel = new JLabel("Cup", SwingConstants.CENTER);
-            cupPanel.add(cupLabel, BorderLayout.SOUTH);
-            gaugePanel.add(cupPanel);
+	public Main() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("java programming report");
+		Container c = getContentPane();
 
-            gaugePanel.add(Box.createRigidArea(new Dimension(20, 20)));
-            //coffeePanel 추가
-            JPanel coffeePanel = new JPanel(new BorderLayout());
-            JProgressBar coffeeBar = new JProgressBar(JProgressBar.VERTICAL, 0,100);
-            coffeeBar.setValue(100);
-            coffeePanel.add(coffeeBar, BorderLayout.NORTH);
-            JLabel coffeeLabel = new JLabel("Coffee", SwingConstants.CENTER);
-            coffeePanel.add(coffeeLabel, BorderLayout.SOUTH);
-            gaugePanel.add(coffeePanel);
+		centerPanel = new CenterPanel();
+		c.add(centerPanel, BorderLayout.CENTER);
+		c.add(new SouthPanel(), BorderLayout.SOUTH);
 
-            gaugePanel.add(Box.createRigidArea(new Dimension(20, 20)));
-            //waterPanel 추가
-            JPanel waterPanel = new JPanel(new BorderLayout());
-            JProgressBar waterBar = new JProgressBar(JProgressBar.VERTICAL, 0,100);
-            waterBar.setValue(100);
-            waterPanel.add(waterBar, BorderLayout.NORTH);
-            JLabel waterLabel = new JLabel("Water", SwingConstants.CENTER);
-            waterPanel.add(waterLabel, BorderLayout.SOUTH);
-            gaugePanel.add(waterPanel);
-            
-            gaugePanel.add(Box.createRigidArea(new Dimension(20, 20)));
-            //sugarPanel 추가
-            JPanel sugarPanel = new JPanel(new BorderLayout());
-            JProgressBar sugarBar = new JProgressBar(JProgressBar.VERTICAL, 0,100);
-            sugarBar.setValue(100);
-            sugarPanel.add(sugarBar, BorderLayout.NORTH);
-            JLabel sugarLabel = new JLabel("Sugar", SwingConstants.CENTER);
-            sugarPanel.add(sugarLabel, BorderLayout.SOUTH);
-            gaugePanel.add(sugarPanel);
-            
-            gaugePanel.add(Box.createRigidArea(new Dimension(20, 20)));
-            //creamPanel추가
-            JPanel creamPanel = new JPanel(new BorderLayout());
-            JProgressBar creamBar = new JProgressBar(JProgressBar.VERTICAL, 0,100);
-            creamBar.setValue(100);
-            creamPanel.add(creamBar, BorderLayout.NORTH);
-            JLabel creamLabel = new JLabel("Cream", SwingConstants.CENTER);
-            creamPanel.add(creamLabel, BorderLayout.SOUTH);
-            gaugePanel.add(creamPanel);
-            
-            gaugePanel.add(Box.createRigidArea(new Dimension(20, 20)));
-            add(gaugePanel, BorderLayout.NORTH);  // 게이지 패널들을 North 영역에 추가
+		setSize(500, 500);
+		setVisible(true);
+	}
 
-            // 이미지 추가
-            ImageIcon coffeeImage = new ImageIcon("coffee.jpg");
-            JLabel imageLabel = new JLabel(coffeeImage);
-            imageLabel.setHorizontalAlignment(JLabel.CENTER);  // 이미지를 가운데 정렬
-            add(imageLabel, BorderLayout.CENTER);  // 이미지를 Center 영역에 추가
-        }
-    }
+	public static void main(String[] args) {
+		new Main();
+	}
 
+	class CenterPanel extends JPanel {
+		JProgressBar cupBar, coffeeBar, waterBar, sugarBar, creamBar;
 
-    class SouthPanel extends JPanel{
-        static int water = 100;
-        static int sugar = 100;
-        static int cup = 100;
-        static int cream = 100;
-        static int coffee = 100;
+		public CenterPanel() {
+			setLayout(new GridLayout(1, 5));
+
+			cupBar = createProgressBar("Cup");
+			coffeeBar = createProgressBar("Coffee");
+			waterBar = createProgressBar("Water");
+			sugarBar = createProgressBar("Sugar");
+			creamBar = createProgressBar("Cream");
+		}
+
+		private JProgressBar createProgressBar(String name) {
+			JProgressBar bar = new JProgressBar(JProgressBar.VERTICAL, 0, 100);
+			bar.setValue(100);
+			bar.setStringPainted(true);
+			bar.setString(name);
+			bar.setForeground(Color.LIGHT_GRAY);
+			this.add(bar);
+			return bar;
+		}
+	}
+
+	class SouthPanel extends JPanel {
+		JButton btnCoffee, btnSugar, btnDabang, btnReset;
 
 		public SouthPanel() {
-            setBackground(Color.LIGHT_GRAY);
-            setOpaque(true);
-            setLayout(new FlowLayout(FlowLayout.CENTER));
-            JButton btnCoffee =new JButton("Black Coffee");
-            btnCoffee.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                	if(water>=10 &&coffee>=10) {
-                		water-=10;
-                		coffee-=10;
-                		JOptionPane.showMessageDialog(null, "Black Coffee가 나왔습니다.");
-                		waterBar.setValue(water);
-                	}
-                }
-            });
-            add(btnCoffee);
-            add(btnCoffee);
-            add(btnCoffee);
-            JButton btnSugar =new JButton("Sugar Coffee");
-            add(btnSugar);
-            JButton btnDabang =new JButton("Dabang Coffee");
-            add(btnDabang);
-            JButton btnReset =new JButton("Reset");
-            add(btnReset);
-        }
-    }
+			btnCoffee = createButton("Black Coffee");
+			btnSugar = createButton("Sugar Coffee");
+			btnDabang = createButton("Dabang Coffee");
+			btnReset = createButton("Reset");
 
+			btnCoffee.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					applyChanges(new JProgressBar[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.cupBar },
+							new int[] { 20, 10, 10 });
+				}
+			});
+
+			btnSugar.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					applyChanges(new JProgressBar[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.sugarBar,
+							centerPanel.cupBar }, new int[] { 10, 10, 10, 10 });
+				}
+			});
+
+			btnDabang.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					applyChanges(new JProgressBar[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.sugarBar,
+							centerPanel.creamBar, centerPanel.cupBar }, new int[] { 10, 10, 10, 10, 10 });
+				}
+			});
+
+			btnReset.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					resetAll();
+				}
+			});
+		}
+
+		private JButton createButton(String name) {
+			JButton button = new JButton(name);
+			this.add(button);
+			return button;
+		}
+
+		private void applyChanges(JProgressBar[] bars, int[] values) {
+			for (int i = 0; i < bars.length; i++) {
+				int newValue = bars[i].getValue() - values[i];
+				if (newValue < 0) {
+					JOptionPane.showMessageDialog(null, "재료가 부족합니다.");
+					return;
+				}
+				bars[i].setValue(newValue);
+				if (newValue <= 30) {
+					bars[i].setForeground(Color.RED);
+				} else {
+					bars[i].setForeground(Color.LIGHT_GRAY);
+				}
+			}
+		}
+
+		private void resetAll() {
+			JProgressBar[] bars = new JProgressBar[] { centerPanel.cupBar, centerPanel.coffeeBar, centerPanel.waterBar,
+					centerPanel.sugarBar, centerPanel.creamBar };
+			for (JProgressBar bar : bars) {
+				bar.setValue(100);
+				bar.setForeground(Color.LIGHT_GRAY);
+			}
+		}
+	}
 }
