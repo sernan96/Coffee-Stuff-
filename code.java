@@ -3,10 +3,13 @@ package Main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,9 +25,11 @@ public class Main extends JFrame {
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("java programming report");
+
 		Container c = getContentPane();
 
 		centerPanel = new CenterPanel();
+		c.add(new NorthPanel(), BorderLayout.NORTH);
 		c.add(centerPanel, BorderLayout.CENTER);
 		c.add(new SouthPanel(), BorderLayout.SOUTH);
 
@@ -34,6 +39,15 @@ public class Main extends JFrame {
 
 	public static void main(String[] args) {
 		new Main();
+	}
+
+	class NorthPanel extends JPanel {
+		public NorthPanel() {
+			setBackground(Color.GREEN);
+			setOpaque(true);
+			setLayout(new FlowLayout(FlowLayout.CENTER));
+			add(new JLabel("반갑습니다. YU커피입니다."));
+		}
 	}
 
 	class CenterPanel extends JPanel {
@@ -50,12 +64,17 @@ public class Main extends JFrame {
 			waterBar = createProgressBar("Water");
 			sugarBar = createProgressBar("Sugar");
 			creamBar = createProgressBar("Cream");
-
+			progressBarPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 			progressBarPanel.add(cupBar);
+			progressBarPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 			progressBarPanel.add(coffeeBar);
+			progressBarPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 			progressBarPanel.add(waterBar);
+			progressBarPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 			progressBarPanel.add(sugarBar);
+			progressBarPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 			progressBarPanel.add(creamBar);
+			progressBarPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 
 			this.add(progressBarPanel, BorderLayout.NORTH);
 
@@ -152,8 +171,9 @@ public class Main extends JFrame {
 				bar.setValue(100);
 				bar.setForeground(Color.LIGHT_GRAY);
 
-				JOptionPane.showMessageDialog(null, "재료가 충전완료~");
 			}
+
+			JOptionPane.showMessageDialog(null, "재료 충전완료~");
 		}
 	}
 }
