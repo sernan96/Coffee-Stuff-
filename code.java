@@ -7,11 +7,14 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 
 public class Main extends JFrame {
 	CenterPanel centerPanel;
@@ -34,26 +37,46 @@ public class Main extends JFrame {
 	}
 
 	class CenterPanel extends JPanel {
-		JProgressBar cupBar, coffeeBar, waterBar, sugarBar, creamBar;
+		JPanel cupBar, coffeeBar, waterBar, sugarBar, creamBar;
+		JLabel coffeeImageLabel;
 
 		public CenterPanel() {
-			setLayout(new GridLayout(1, 5));
+			setLayout(new BorderLayout());
+			JPanel progressBarPanel = new JPanel();
+			progressBarPanel.setLayout(new GridLayout(1, 5));
 
 			cupBar = createProgressBar("Cup");
 			coffeeBar = createProgressBar("Coffee");
 			waterBar = createProgressBar("Water");
 			sugarBar = createProgressBar("Sugar");
 			creamBar = createProgressBar("Cream");
+
+			progressBarPanel.add(cupBar);
+			progressBarPanel.add(coffeeBar);
+			progressBarPanel.add(waterBar);
+			progressBarPanel.add(sugarBar);
+			progressBarPanel.add(creamBar);
+
+			this.add(progressBarPanel, BorderLayout.NORTH);
+
+			coffeeImageLabel = new JLabel();
+			coffeeImageLabel.setHorizontalAlignment(JLabel.CENTER);
+			coffeeImageLabel.setIcon(new ImageIcon("coffee.jpg"));
+			this.add(coffeeImageLabel, BorderLayout.CENTER);
 		}
 
-		private JProgressBar createProgressBar(String name) {
+		private JPanel createProgressBar(String name) {
+			JPanel barPanel = new JPanel(new BorderLayout());
 			JProgressBar bar = new JProgressBar(JProgressBar.VERTICAL, 0, 100);
 			bar.setValue(100);
-			bar.setStringPainted(true);
-			bar.setString(name);
+			bar.setStringPainted(false);
 			bar.setForeground(Color.LIGHT_GRAY);
-			this.add(bar);
-			return bar;
+
+			JLabel barLabel = new JLabel(name, SwingConstants.CENTER);
+			barPanel.add(bar, BorderLayout.CENTER);
+			barPanel.add(barLabel, BorderLayout.SOUTH);
+
+			return barPanel;
 		}
 	}
 
@@ -69,7 +92,7 @@ public class Main extends JFrame {
 			btnCoffee.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					applyChanges(new JProgressBar[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.cupBar },
+					applyChanges(new JPanel[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.cupBar },
 							new int[] { 20, 10, 10 });
 				}
 			});
@@ -77,7 +100,7 @@ public class Main extends JFrame {
 			btnSugar.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					applyChanges(new JProgressBar[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.sugarBar,
+					applyChanges(new JPanel[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.sugarBar,
 							centerPanel.cupBar }, new int[] { 10, 10, 10, 10 });
 				}
 			});
@@ -85,7 +108,7 @@ public class Main extends JFrame {
 			btnDabang.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					applyChanges(new JProgressBar[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.sugarBar,
+					applyChanges(new JPanel[] { centerPanel.coffeeBar, centerPanel.waterBar, centerPanel.sugarBar,
 							centerPanel.creamBar, centerPanel.cupBar }, new int[] { 10, 10, 10, 10, 10 });
 				}
 			});
@@ -104,28 +127,32 @@ public class Main extends JFrame {
 			return button;
 		}
 
-		private void applyChanges(JProgressBar[] bars, int[] values) {
+		private void applyChanges(JPanel[] bars, int[] values) {
 			for (int i = 0; i < bars.length; i++) {
-				int newValue = bars[i].getValue() - values[i];
+				JProgressBar bar = (JProgressBar) bars[i].getComponent(0);
+				int newValue = bar.getValue() - values[i];
 				if (newValue < 0) {
 					JOptionPane.showMessageDialog(null, "재료가 부족합니다.");
 					return;
 				}
-				bars[i].setValue(newValue);
+				bar.setValue(newValue);
 				if (newValue <= 30) {
-					bars[i].setForeground(Color.RED);
+					bar.setForeground(Color.RED);
 				} else {
-					bars[i].setForeground(Color.LIGHT_GRAY);
+					bar.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 		}
 
 		private void resetAll() {
-			JProgressBar[] bars = new JProgressBar[] { centerPanel.cupBar, centerPanel.coffeeBar, centerPanel.waterBar,
+			JPanel[] bars = new JPanel[] { centerPanel.cupBar, centerPanel.coffeeBar, centerPanel.waterBar,
 					centerPanel.sugarBar, centerPanel.creamBar };
-			for (JProgressBar bar : bars) {
+			for (JPanel barPanel : bars) {
+				JProgressBar bar = (JProgressBar) barPanel.getComponent(0);
 				bar.setValue(100);
 				bar.setForeground(Color.LIGHT_GRAY);
+
+				JOptionPane.showMessageDialog(null, "재료가 충전완료~");
 			}
 		}
 	}
